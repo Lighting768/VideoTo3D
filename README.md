@@ -61,3 +61,96 @@ Turn normal 2D videos, drone footage (1080p/4K), and images into **interactive 3
    ```bash
    git clone https://github.com/your-username/VideoTo3D.git
    cd VideoTo3D
+   ```
+
+2. **Run the automated setup**:
+   Double-click `run.bat` or run:
+   ```bash
+   python setup.py
+   ```
+   *This automatically verifies CUDA, installs Python dependencies, and ensures bundled FFmpeg and COLMAP binaries are present.*
+
+3. **Launch the Application**:
+   ```bash
+   run.bat
+   ```
+   *or:*
+   ```bash
+   python VideoTo3D.py
+   ```
+
+4. **Verify System Setup**:
+   ```bash
+   python VideoTo3D.py --check
+   ```
+
+---
+
+## 🖥️ User Guide
+
+### 🛰️ Drone 3D Reconstruction Workflow
+1. Navigate to the **COLMAP / NeRF** tab.
+2. Click **Browse** and select your drone video (`.mp4` / `.mov`).
+3. *(Optional)* Select your flight metadata or DJI `.srt` file. The GPS parser will display coordinates, bounding box, and altitude stats.
+4. Set **Sample FPS** (typically `2.0` to `3.0` fps).
+5. Ensure **Use GPU (CUDA)** and **Dense Reconstruction** are checked.
+6. Click **▶ Run Full Pipeline**.
+7. Once finished:
+   * View the camera path in **Camera Positions**.
+   * Inspect the 3D model in the **3D Model (Interactive)** tab.
+   * Click **Open in 3D Browser Viewer** to view with full OrbitControls.
+   * Click **Save / Download 3D** and choose your desired format (`GLB`, `OBJ`, `PLY`, `LAS`, `GeoTIFF`, or `ZIP`).
+
+### 🎬 2D to VR 3D Video Conversion Workflow
+1. Go to the **3D Generator** tab.
+2. Select your input video or photo.
+3. Choose your depth model (e.g., *Depth Anything V2 Small* for high speed or *Large* for maximum detail).
+4. Select your **Stereo Format** (e.g., `half_sbs` for VR headsets).
+5. Adjust **Strength** and **FG Pop** sliders.
+6. Click **⚡ Preview** to inspect the 2D stereo result and rotate the generated **Interactive 3D model**.
+7. Click **▶ Render** to generate the final stereoscopic video.
+
+---
+
+## 📁 Repository Structure
+
+```text
+VideoTo3D/
+├── VideoTo3D.py              # Main GUI application entry point
+├── run.bat                   # 1-click Windows launcher
+├── setup.py                  # Automated dependency installer & hardware detector
+├── requirements.txt          # Python dependencies
+├── config.json               # Application configuration
+├── bin/                      # Bundled portable binaries
+│   ├── ffmpeg.exe            # Video encoding/decoding engine
+│   ├── ffprobe.exe           # Stream analysis
+│   └── colmap/               # Portable CUDA-enabled COLMAP binary
+├── core/                     # Processing & algorithm backend
+│   ├── colmap_pipeline.py    # SfM & MVS pipeline manager
+│   ├── gps_parser.py         # DJI SRT, CSV, GeoJSON GPS parser
+│   ├── mesh_exporter.py      # OBJ, PLY, GLB, LAS, GeoTIFF, FBX exporters
+│   ├── depth_engine.py       # AI depth estimation model manager
+│   ├── stereo_renderer.py    # Stereoscopic disparity warping engine
+│   ├── frame_processor.py    # Video I/O & frame manipulation
+│   ├── rife_interpolator.py  # AI motion interpolation
+│   └── upscaler.py           # Super-resolution upscaling
+└── ui/                       # Modern dark-mode Qt interface
+    ├── main_window.py        # Top-level window and tab management
+    ├── model_3d_viewer.py    # Interactive 3D point cloud & mesh viewer
+    ├── camera_preview.py     # 3D trajectory visualizer
+    ├── preview_widget.py     # 2D image preview component
+    ├── tab_3d_generator.py   # Stereo VR conversion tab
+    ├── tab_colmap.py         # Photogrammetry & reconstruction tab
+    ├── tab_depth.py          # Standalone depth estimation tab
+    ├── tab_fps_upscale.py    # Frame rate interpolation & upscaling tab
+    └── style.py              # CSS/QSS dark design system
+```
+
+---
+
+
+### Installation
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/VideoTo3D.git
+   cd VideoTo3D
